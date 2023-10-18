@@ -37,6 +37,10 @@ public:
 
     void openFile(const QString &);
 
+public Q_SLOTS:
+    // SOCKET-RELATED
+    void connectSocket();
+
 private slots:
     // UI-RELATED
     void about();
@@ -54,7 +58,6 @@ private slots:
     void enableInputTypeSelection();
     void disableInputTypeSelection();
     // SOCKET-RELATED
-    void connectSocket();
     void readIncomingData();
     void displayError(QAbstractSocket::SocketError);
     // TEST-RELATED

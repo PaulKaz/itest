@@ -19,6 +19,8 @@
 
 #include "question_item.h"
 
+#include <QRandomGenerator>
+
 QuestionItem::QuestionItem(const QString &name)
 {
      q_name = name;
@@ -39,7 +41,7 @@ void QuestionItem::shuffleAnswers()
     int rand;
     for (int i = 0; i < q_answers.count(); ++i) {
         do {
-            rand = qrand() % q_answers.count();
+            rand = QRandomGenerator::global()->generate() % q_answers.count();
         } while (q_ans_order.contains(rand));
         q_ans_order << rand;
     }

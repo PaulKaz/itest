@@ -141,10 +141,10 @@ void MainWindow::sendResults()
     }
     QTextStream sfile(&file);
     sfile.setCodec("UTF-8");
-    sfile << "[TEST_NAME]\n" << current_db_name << endl;
-    sfile << "[TEST_TIMESTAMP]\n" << current_test_date << endl;
-    sfile << "[TIME_FINISHED]\n" << current_test_time_finished << endl;
-    sfile << "[CLIENT_NAME]\n" << nameLineEdit->text() << endl;
+    sfile << "[TEST_NAME]\n" << current_db_name << Qt::endl;
+    sfile << "[TEST_TIMESTAMP]\n" << current_test_date << Qt::endl;
+    sfile << "[TIME_FINISHED]\n" << current_test_time_finished << Qt::endl;
+    sfile << "[CLIENT_NAME]\n" << nameLineEdit->text() << Qt::endl;
     for (int i = 0; i < LQListWidget->count(); ++i) {
         sfile << "[Q_NAME]\n";
         sfile << current_test_questions.value(LQListWidget->item(i))->name();
@@ -154,7 +154,7 @@ void MainWindow::sendResults()
         } else {
             sfile << Question::convertToOldAnsNumber(current_test_questions.value(LQListWidget->item(i))->answered());
         }
-        sfile << endl;
+        sfile << Qt::endl;
     }
 }
 

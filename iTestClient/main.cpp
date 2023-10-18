@@ -21,6 +21,7 @@
 
 #include <QSettings>
 #include <QTranslator>
+#include <QHostAddress>
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,17 @@ int main(int argc, char *argv[])
     MTApplication app(argc, argv);
     app.setApplicationName("iTestClient");
     app.setApplicationVersion(ITEST_VERSION);
+
+    QString host = "";
+    quint16 port = 0;
+
+    if (app.arguments().size() == 5) {
+        if (app.arguments().at(1) == "--host" && app.arguments().at(3) == "--port") {
+            host = app.arguments().at(2);
+            port = app.arguments().at(4).toUShort();
+        }
+    }
+
 
 #ifdef Q_OS_WIN32
     if (QSysInfo::WindowsVersion > QSysInfo::WV_6_1)
@@ -49,8 +61,15 @@ int main(int argc, char *argv[])
         app.installTranslator(translator);
     }
 
-    MainWindow *itest_window = new MainWindow;
+    if(port > 0) {
+        QSettings settings("Michal Tomlein", "iTest");
+        settings.setValue("client/serverName", host);
+        settings.setValue("client/serverPort", port);
+    }
+
+    MainWindow *itest_window = new MainWindow;    
     app.setAppMainWindow(itest_window);
     itest_window->showFullScreen();
+    itest_window->connectSocket();
     return app.exec();
 }

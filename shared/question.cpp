@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QTextDocument>
 #include <QProgressDialog>
+#include <QRandomGenerator>
 
 int pow(int base, int exp)
 {
@@ -168,16 +169,16 @@ void Question::setCorrectAnswers(Question::Answers answers) { q_correctanswers =
 int Question::answerToIndex(Question::Answer ans)
 {
     switch (ans) {
-        case Question::None: return 0; break;
-        case Question::A: return 1; break;
-        case Question::B: return 2; break;
-        case Question::C: return 3; break;
-        case Question::D: return 4; break;
-        case Question::E: return 5; break;
-        case Question::F: return 6; break;
-        case Question::G: return 7; break;
-        case Question::H: return 8; break;
-        case Question::I: return 9; break;
+        case Question::None: return 0;
+        case Question::A: return 1;
+        case Question::B: return 2;
+        case Question::C: return 3;
+        case Question::D: return 4;
+        case Question::E: return 5;
+        case Question::F: return 6;
+        case Question::G: return 7;
+        case Question::H: return 8;
+        case Question::I: return 9;
     }
     return 0;
 }
@@ -207,16 +208,16 @@ int Question::labelToIndex(const QString &label)
 QString Question::indexToLabel(int i)
 {
     switch (i) {
-        case 0: return QObject::tr("None"); break;
-        case 1: return QObject::tr("a)"); break;
-        case 2: return QObject::tr("b)"); break;
-        case 3: return QObject::tr("c)"); break;
-        case 4: return QObject::tr("d)"); break;
-        case 5: return QObject::tr("e)"); break;
-        case 6: return QObject::tr("f)"); break;
-        case 7: return QObject::tr("g)"); break;
-        case 8: return QObject::tr("h)"); break;
-        case 9: return QObject::tr("i)"); break;
+        case 0: return QObject::tr("None");
+        case 1: return QObject::tr("a)");
+        case 2: return QObject::tr("b)");
+        case 3: return QObject::tr("c)");
+        case 4: return QObject::tr("d)");
+        case 5: return QObject::tr("e)");
+        case 6: return QObject::tr("f)");
+        case 7: return QObject::tr("g)");
+        case 8: return QObject::tr("h)");
+        case 9: return QObject::tr("i)");
     }
     return QObject::tr("None");
 }
@@ -238,11 +239,11 @@ QString Question::answerToString(Question::Answer ans)
 Question::Answer Question::convertOldAnsNumber(int num)
 {
     switch (num) {
-        case 0: return Question::None; break;
-        case 1: return Question::A; break;
-        case 2: return Question::B; break;
-        case 3: return Question::C; break;
-        case 4: return Question::D; break;
+        case 0: return Question::None;
+        case 1: return Question::A;
+        case 2: return Question::B;
+        case 3: return Question::C;
+        case 4: return Question::D;
     }
     return (Question::Answer)num;
 }
@@ -250,11 +251,11 @@ Question::Answer Question::convertOldAnsNumber(int num)
 int Question::convertToOldAnsNumber(int num)
 {
     switch (num) {
-        case 0: return 0; break;
-        case 1: return 1; break;
-        case 2: return 2; break;
-        case 4: return 3; break;
-        case 8: return 4; break;
+        case 0: return 0;
+        case 1: return 1;
+        case 2: return 2;
+        case 4: return 3;
+        case 8: return 4;
     }
     return 0;
 }
@@ -366,14 +367,14 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
     QList<int> final_randlist;
     QList<QString> groups;
     if (passmark.count() <= 0) {
-        if (progress != NULL) {
+        if (progress != Q_NULLPTR) {
             progress->setMaximum(qnum);
         }
         int rand;
         for (int i = 0; i < qnum; ++i) {
             random_0:
             do {
-                rand = (qrand() + id) % questions.size();
+                rand = (QRandomGenerator::global()->generate() + id) % questions.size();
             } while (final_randlist.contains(rand));
             if (use_groups) {
                 if (!questions.at(rand)->group().isEmpty()) {
@@ -385,15 +386,15 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
                 }
             }
             final_randlist << rand;
-            if (progress != NULL) {
+            if (progress != Q_NULLPTR) {
                 progress->setValue(i + 1); // PROGRESS >>>>>>>
             }
-            if (app != NULL) {
+            if (app != Q_NULLPTR) {
                 app->processEvents();
             }
         }
     } else {
-        if (progress != NULL) {
+        if (progress != Q_NULLPTR) {
             progress->setMaximum(questions.size() + passmark.count());
         }
         QVector<QList<Question *> > qflist(passmark.count());
@@ -405,10 +406,10 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
             } else {
                 unusedqlist << questions.at(i);
             }
-            if (progress != NULL) {
+            if (progress != Q_NULLPTR) {
                 progress->setValue(i + 1); // PROGRESS >>>>>>>
             }
-            if (app != NULL) {
+            if (app != Q_NULLPTR) {
                 app->processEvents();
             }
         }
@@ -421,7 +422,7 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
             for (int i = 0; i < passmark.qnum(c); ++i) {
                 random_1:
                 do {
-                    rand = (qrand() + id) % qflist[x].size();
+                    rand = (QRandomGenerator::global()->generate() + id) % qflist[x].size();
                 } while (randlist.contains(rand));
                 if (use_groups) {
                     if (!qflist[x].at(rand)->group().isEmpty()) {
@@ -433,7 +434,7 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
                     }
                 }
                 randlist << rand;
-                if (app != NULL) {
+                if (app != Q_NULLPTR) {
                     app->processEvents();
                 }
             }
@@ -445,10 +446,10 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
             for (int i = 0; i < randlist.count(); ++i) {
                 final_randlist << questions.indexOf(qflist[x].at(randlist.at(i)));
             }
-            if (progress != NULL) {
+            if (progress != Q_NULLPTR) {
                 progress->setValue(c + questions.size() + 1); // PROGRESS
             }
-            if (app != NULL) {
+            if (app != Q_NULLPTR) {
                 app->processEvents();
             }
         }
@@ -458,7 +459,7 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
         for (int i = 0; i < y; ++i) {
             random_2:
             do {
-                rand = (qrand() + id) % unusedqlist.size();
+                rand = (QRandomGenerator::global()->generate() + id) % unusedqlist.size();
             } while (randlist.contains(rand));
             if (use_groups) {
                 if (!unusedqlist.at(rand)->group().isEmpty()) {
@@ -470,10 +471,10 @@ QList<int> Question::randomise(QList<Question *> questions, PassMark passmark, b
                 }
             }
             randlist << rand;
-            if (progress != NULL) {
+            if (progress != Q_NULLPTR) {
                 progress->setValue(i + z + 1); // PROGRESS >>>
             }
-            if (app != NULL) {
+            if (app != Q_NULLPTR) {
                 app->processEvents();
             }
         }
